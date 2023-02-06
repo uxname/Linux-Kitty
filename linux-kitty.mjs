@@ -199,20 +199,21 @@ async function installOhMyZshPlugins() {
 }
     
 
-// await updateOs();
-// await installAptPackages();
-// await installFlatpakPackages();
-// await installSnapPackages();
+await updateOs();
+await installAptPackages();
+await installFlatpakPackages();
+await installSnapPackages();
 
-// await installOhMyZsh();
-// await installOhMyZshPlugins();
+await installOhMyZsh();
+await installOhMyZshPlugins();
 
-// await installWebStorm();
-// await installDatagrip(); //todo test
-// await installPycharm(); //todo test
+await installWebStorm();
+await installDatagrip(); //todo test
+await installPycharm(); //todo test
 
-// await installGoogleChrome();
-// await installTelegram();
+await installGoogleChrome();
+await installTelegram();
+
 await printNotifications();
 
 
