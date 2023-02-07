@@ -2,7 +2,7 @@
 
 ## Description
 
-Script to install and configure software on a fresh install of Ubuntu-based Linux distro.
+Script to install and configure software on a fresh KDE Neon.
 
 ## Usage
 
