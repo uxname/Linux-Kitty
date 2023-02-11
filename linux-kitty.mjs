@@ -13,7 +13,9 @@ async function installAptPackages() {
     const APT_APPS = [
         'mc',
         'zsh',
+        'python3-pip',
         'htop',
+        'sshpass',
         'p7zip-full',
         'ncdu',
         'apt-transport-https',
@@ -72,7 +74,8 @@ async function installFlatpakPackages() {
         'org.onlyoffice.desktopeditors',
         'rest.insomnia.Insomnia',
         'com.anydesk.Anydesk',
-        'net.xmind.XMind8',
+        'com.viber.Viber',
+        'net.xmind.XMind',
         'io.github.jordanl2.ModularCalculator',
         'md.obsidian.Obsidian',
         'org.flameshot.Flameshot',
@@ -159,8 +162,20 @@ async function printNotifications() {
     l('Set ZSH default shell in Terminal App (like Konsole)');
     l('Install ublock origin: https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm');
     l('Install Chrome JSON viewer: https://chrome.google.com/webstore/detail/json-formatter/mhimpmpmffogbmmkmajibklelopddmjf');
+    l('Install Chrome BitWarden: https://chrome.google.com/webstore/detail/nngceckbapebfimnlniiiahkandclblb');
+    l('Download VirtualBox Guest Additions disk image');
     l('Hack Webstorm: https://jetbra.in/s');
     l('Hack Datagrip: https://jetbra.in/s');
+    l('Hack PyCharm: https://jetbra.in/s');
+    l('Setup Plasma Search, leave only: Applications, Calculator, Command line, Unit Converter');
+    l('Replace task manager panel with alternative');
+    l('Add russian keyboard');
+    l('Add open as root to Dolphin');
+    l('Add several virtual desktops');
+    l('Import shortcuts from https://gist.github.com/uxname/d2287dedda6313068e8eebf27c29d8b0');
+    l('Add Webstorm plugins: T-Sol / Solidity, Prisma, GraphQL, Plant UML Integration, Copilot, .env files support, .ignore, GitToolBox, React snippets, React buddy');
+    l('Optional: Enable zram-config')
+
     console.log('--------------------------------------------------');
 }
 
@@ -197,7 +212,15 @@ async function installOhMyZshPlugins() {
     await $`git clone https://github.com/zsh-users/zsh-autosuggestions \${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions`;
     await $`git clone https://github.com/lukechilds/zsh-nvm ~/.oh-my-zsh/custom/plugins/zsh-nvm`;
 }
-    
+
+async function tuneOs() {
+    // Hide ~/snap directory via adding it to the list of hidden directories (~/.hidden)
+    await $`touch ${os.homedir()}/.hidden`;
+    fs.appendFileSync(`${os.homedir()}/.hidden`, 'snap\n');
+
+    // Make docker work without sudo
+    await $`sudo usermod -aG docker $USER`;
+}
 
 await updateOs();
 await installAptPackages();
@@ -216,23 +239,7 @@ await installTelegram();
 
 await printNotifications();
 
-
-// For SSD:
-// max_inline=256,ssd,compress=lzo,ssd_spread,noatime,space_cache
+await tuneOs();
 
 // Disable intel turbo
-
-// MAYBE
-// Improve swap
-// sudo echo "vm.swappiness = 10" >> /etc/sysctl.conf && sudo sysctl -p
-
-
-// bash_aliases
-//
-// alias apt='sudo apt'
-// alias upd='sudo apt update && sudo pkcon -y update && sudo snap refresh && flatpak update -y'
-// alias dcc='docker-compose'
-
-
-// notify to install Chrome apps: ublock origin...
 
