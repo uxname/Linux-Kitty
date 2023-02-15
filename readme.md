@@ -7,7 +7,7 @@ Script to install and configure software on a fresh KDE Neon.
 ## Usage
 
 ```bash
-sudo apе sudo apt install git && \
+sudo apt sudo apt install git && \
 git clone https://github.com/uxname/Linux-Kitty.git && cd Linux-Kitty \
 && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash \
 && export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] \
