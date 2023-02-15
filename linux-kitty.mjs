@@ -13,6 +13,8 @@ async function installAptPackages() {
     const APT_APPS = [
         'mc',
         'zsh',
+        'asciinema',
+        'zram-config',
         'python3-pip',
         'htop',
         'sshpass',
@@ -166,6 +168,7 @@ async function printNotifications() {
     l('Download VirtualBox Guest Additions disk image');
     l('Hack Webstorm: https://jetbra.in/s');
     l('Hack Datagrip: https://jetbra.in/s');
+    // todo goland
     l('Hack PyCharm: https://jetbra.in/s');
     l('Setup Plasma Search, leave only: Applications, Calculator, Command line, Unit Converter');
     l('Replace task manager panel with alternative');
@@ -174,7 +177,7 @@ async function printNotifications() {
     l('Add several virtual desktops');
     l('Import shortcuts from https://gist.github.com/uxname/d2287dedda6313068e8eebf27c29d8b0');
     l('Add Webstorm plugins: T-Sol / Solidity, Prisma, GraphQL, Plant UML Integration, Copilot, .env files support, .ignore, GitToolBox, React snippets, React buddy');
-    l('Optional: Enable zram-config')
+    l('Optional: sudo apt remove zram-config')
 
     console.log('--------------------------------------------------');
 }
@@ -220,6 +223,10 @@ async function tuneOs() {
 
     // Make docker work without sudo
     await $`sudo usermod -aG docker $USER`;
+
+    await $`npm config set legacy-peer-deps true`;
+
+    // todo Disable intel turbo
 }
 
 await updateOs();
@@ -241,5 +248,4 @@ await printNotifications();
 
 await tuneOs();
 
-// Disable intel turbo
 
