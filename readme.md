@@ -36,6 +36,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 - https://www.jetbrains.com/pycharm/
 - https://www.jetbrains.com/go/
 - https://desktop.telegram.org/
+- https://anydesk.com/en/downloads/linux?dv=deb_64
 
 - https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh
 - https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh
@@ -71,6 +72,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 - Enable night color
 - Add russian keyboard
 - Switch keyboard indicator to flag
+- Change keyboard delay and rate to: 250ms, 50 repeat/s
 - Add open as root to Dolphin
 - Set home dir as default in Doplhin
 - Set Chrome Default browser
