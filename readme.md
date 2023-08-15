@@ -17,7 +17,7 @@ sudo apt install -y mc zsh asciinema zram-config python3-pip htop sshpass p7zip-
 
 flatpak install -y com.discordapp.Discord org.onlyoffice.desktopeditors rest.insomnia.Insomnia com.anydesk.Anydesk com.viber.Viber net.xmind.XMind io.github.jordanl2.ModularCalculator md.obsidian.Obsidian org.flameshot.Flameshot com.jgraph.drawio.desktop com.github.tchx84.Flatseal com.valvesoftware.Steam
 
-sudo snap install bitwarden
+sudo snap install bitwarden figma-linux
 
 echo snap >> ~/.hidden
 curl -sSL get.docker.com | sh
