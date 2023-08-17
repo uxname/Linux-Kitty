@@ -13,7 +13,7 @@ sudo add-apt-repository -y ppa:nrbrtx/xorg-hotkeys
 sudo apt update
 sudo pkcon -y update && sudo snap refresh && flatpak update -y
 
-sudo apt install -y mc kompare elisa zsh asciinema zram-config python3-pip htop sshpass p7zip-full ncdu apt-transport-https ca-certificates chkrootkit rkhunter okteta golang-go gccgo pinta gocryptfs audacity obs-studio cpu-checker iotop qemu-kvm bridge-utils gnome-games pwgen adb gpp remmina remmina-plugin-rdp remmina-plugin-vnc virtualbox-ext-pack vlc inkscape glogg gpick hardinfo virtualbox-qt sqlitebrowser pgmodeler umbrello kamoso bleachbit gparted build-essential git docker-compose fonts-liberation filelight gimp kdenlive qtqr transmission-qt pv handbrake flameshot laptop-mode-tools wireguard resolvconf software-properties-qt openjdk-17-jdk
+sudo apt install -y mc muon kompare elisa zsh asciinema zram-config python3-pip htop sshpass p7zip-full ncdu apt-transport-https ca-certificates chkrootkit rkhunter okteta golang-go gccgo pinta gocryptfs audacity obs-studio cpu-checker iotop qemu-kvm bridge-utils gnome-games pwgen adb gpp remmina remmina-plugin-rdp remmina-plugin-vnc virtualbox-ext-pack vlc inkscape glogg gpick hardinfo virtualbox-qt sqlitebrowser pgmodeler umbrello kamoso bleachbit gparted build-essential git docker-compose fonts-liberation filelight gimp kdenlive qtqr transmission-qt pv handbrake flameshot laptop-mode-tools wireguard resolvconf software-properties-qt openjdk-17-jdk
 
 flatpak install -y in.srev.guiscrcpy com.discordapp.Discord org.onlyoffice.desktopeditors rest.insomnia.Insomnia com.anydesk.Anydesk com.viber.Viber net.xmind.XMind io.github.jordanl2.ModularCalculator md.obsidian.Obsidian org.flameshot.Flameshot com.jgraph.drawio.desktop com.github.tchx84.Flatseal com.valvesoftware.Steam
 
