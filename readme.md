@@ -51,6 +51,8 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
     alias apt='sudo apt'
     alias upd='sudo apt update && sudo pkcon -y update && sudo snap refresh && flatpak update -y'
     alias dcc='docker-compose'
+    alias 7za='7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on'
+    alias docker-clean='docker stop $(docker ps -aq) && docker rm $(docker ps -aq)'
     ```
 
 ---
