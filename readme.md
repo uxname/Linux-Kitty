@@ -10,21 +10,23 @@ Script to install and configure software on a fresh KDE Neon.
 
 ```bash
 sudo add-apt-repository -y ppa:nrbrtx/xorg-hotkeys
+sudo apt-add-repository ppa:fish-shell/release-3
 sudo apt update
 sudo pkcon -y update && sudo snap refresh && flatpak update -y
 
-sudo apt install -y mc muon kompare elisa zsh asciinema zram-config python3-pip htop sshpass p7zip-full ncdu apt-transport-https ca-certificates chkrootkit rkhunter okteta golang-go gccgo pinta gocryptfs audacity obs-studio cpu-checker iotop qemu-kvm bridge-utils gnome-games pwgen adb gpp remmina remmina-plugin-rdp remmina-plugin-vnc virtualbox-ext-pack vlc inkscape glogg gpick hardinfo virtualbox-qt sqlitebrowser pgmodeler umbrello kamoso bleachbit gparted build-essential git docker-compose fonts-liberation filelight gimp kdenlive qtqr transmission-qt pv handbrake flameshot laptop-mode-tools wireguard resolvconf software-properties-qt openjdk-17-jdk
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+fisher install jorgebucaran/fisher fabioantunes/fish-nvm edc/bass oh-my-fish/theme-agnoster jethrokuan/z franciscolourenco/done danhper/fish-ssh-agent
+
+sudo apt install -y fish trash-cli mc muon kompare elisa asciinema zram-config python3-pip htop sshpass p7zip-full ncdu apt-transport-https ca-certificates chkrootkit rkhunter okteta golang-go gccgo pinta gocryptfs audacity obs-studio cpu-checker iotop qemu-kvm bridge-utils gnome-games pwgen adb gpp remmina remmina-plugin-rdp remmina-plugin-vnc virtualbox-ext-pack vlc inkscape glogg gpick hardinfo virtualbox-qt sqlitebrowser pgmodeler umbrello kamoso bleachbit gparted build-essential git docker-compose fonts-liberation filelight gimp kdenlive qtqr transmission-qt pv handbrake flameshot laptop-mode-tools wireguard resolvconf software-properties-qt openjdk-17-jdk
 
 flatpak install -y org.localsend.localsend_app in.srev.guiscrcpy com.discordapp.Discord org.onlyoffice.desktopeditors rest.insomnia.Insomnia com.anydesk.Anydesk com.viber.Viber net.xmind.XMind io.github.jordanl2.ModularCalculator md.obsidian.Obsidian org.flameshot.Flameshot com.jgraph.drawio.desktop com.github.tchx84.Flatseal com.valvesoftware.Steam
 
-sudo snap install bitwarden
+sudo snap install bitwarden ngrok
 
 echo snap >> ~/.hidden
 curl -sSL get.docker.com | sh
 sudo usermod -aG docker $USER
 npm config set legacy-peer-deps true
-
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
@@ -40,21 +42,15 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 - https://desktop.telegram.org/
 - https://anydesk.com/en/downloads/linux?dv=deb_64
 
-- https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh
-- https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh
-- https://github.com/lukechilds/zsh-nvm#as-an-oh-my-zsh-custom-plugin
-- nano ~/.zshrc:
+- nano `~/.config/fish/config.fish`:
     ```
-    ...
-    ZSH_THEME="agnoster"
-    ...
-    plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-nvm)
-    ...
+    alias dcc="docker-compose"
     alias apt='sudo apt'
     alias upd='sudo apt update && sudo pkcon -y update && sudo snap refresh && flatpak update -y'
-    alias dcc='docker-compose'
     alias 7za='7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on'
-    alias docker-clean='docker stop $(docker ps -aq) && docker rm $(docker ps -aq)'
+    alias docker-clean='docker stop (docker ps -aq) && docker rm (docker ps -aq)'
+    alias ccat='batcat'
+    alias rm='trash'
     ```
 
 ---
@@ -63,7 +59,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 - Login in Google Chrome
 - Add Flameshot to autostart
 - Bind PrnScr shortcut to Flameshot
-- Set ZSH default shell in Terminal App (like Konsole)
+- Set Fish default shell in Terminal App (like Konsole)
 - Install ublock origin: https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm
 - Install Chrome JSON viewer: https://chrome.google.com/webstore/detail/json-formatter/mhimpmpmffogbmmkmajibklelopddmjf
 - Install Chrome BitWarden: https://chrome.google.com/webstore/detail/nngceckbapebfimnlniiiahkandclblb
