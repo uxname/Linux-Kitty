@@ -52,6 +52,16 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     alias docker-clean='docker stop (docker ps -aq) && docker rm (docker ps -aq)'
     alias ccat='batcat'
     alias rm='trash'
+  
+    function convert_images_to_webp
+      for img in *.jpg *.jpeg *.png *.gif *.bmp; 
+          set new_img (string replace -r '\.(jpg|jpeg|png|gif|bmp)$' '.webp' $img); 
+          cwebp $img -o $new_img; 
+          rm $img; 
+      end
+    end
+
+    alias webp-all='convert_images_to_webp'
     ```
 
 ---
