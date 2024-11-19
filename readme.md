@@ -49,7 +49,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     alias apt='sudo apt'
     alias upd='sudo apt update && sudo pkcon -y update && sudo snap refresh && flatpak update -y'
     alias 7za='7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on'
-    alias docker-clean='docker stop (docker ps -aq) && docker rm (docker ps -aq)'
+    alias docker-clean='docker kill (docker ps -aq) && docker rm (docker ps -aq)'
     alias ccat='batcat'
     alias rm='trash'
   
