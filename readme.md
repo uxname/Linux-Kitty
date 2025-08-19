@@ -16,11 +16,11 @@ sudo apt update
 sudo pkcon -y update && sudo snap refresh && flatpak update -y
 
 curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
-fisher install jorgebucaran/fisher fabioantunes/fish-nvm edc/bass oh-my-fish/theme-agnoster jethrokuan/z franciscolourenco/done danhper/fish-ssh-agent
+fisher install jorgebucaran/nvm.fish edc/bass oh-my-fish/theme-agnoster jethrokuan/z franciscolourenco/done danhper/fish-ssh-agent
 
-sudo apt install -y fastfetch fish trash-cli mc muon kompare elisa asciinema zram-config python3-pip htop sshpass p7zip-full gdu apt-transport-https ca-certificates chkrootkit rkhunter okteta golang-go gccgo pinta gocryptfs audacity obs-studio cpu-checker iotop qemu-kvm bridge-utils gnome-games pwgen adb gpp remmina remmina-plugin-rdp remmina-plugin-vnc virtualbox-ext-pack vlc inkscape glogg gpick hardinfo virtualbox-qt sqlitebrowser pgmodeler umbrello kamoso bleachbit gparted build-essential git docker-compose fonts-liberation filelight gimp kdenlive qtqr transmission-qt pv handbrake flameshot laptop-mode-tools wireguard resolvconf software-properties-qt openjdk-17-jdk
+sudo apt install -y fastfetch fish trash-cli mc muon kompare elisa asciinema zram-config python3-pip htop sshpass p7zip-full gdu apt-transport-https ca-certificates chkrootkit rkhunter okteta golang-go gccgo pinta gocryptfs audacity obs-studio cpu-checker iotop qemu-kvm bridge-utils gnome-games pwgen adb gpp remmina remmina-plugin-rdp remmina-plugin-vnc virtualbox-ext-pack vlc inkscape glogg gpick hardinfo virtualbox-qt sqlitebrowser pgmodeler umbrello kamoso bleachbit gparted build-essential git fonts-liberation filelight gimp kdenlive qtqr transmission-qt pv handbrake laptop-mode-tools wireguard resolvconf software-properties-qt openjdk-17-jdk
 
-flatpak install -y org.localsend.localsend_app in.srev.guiscrcpy com.discordapp.Discord org.onlyoffice.desktopeditors rest.insomnia.Insomnia com.anydesk.Anydesk com.viber.Viber net.xmind.XMind io.github.jordanl2.ModularCalculator md.obsidian.Obsidian org.flameshot.Flameshot com.jgraph.drawio.desktop com.github.tchx84.Flatseal com.valvesoftware.Steam
+flatpak install -y org.localsend.localsend_app in.srev.guiscrcpy com.discordapp.Discord org.onlyoffice.desktopeditors rest.insomnia.Insomnia com.anydesk.Anydesk com.viber.Viber net.xmind.XMind io.github.jordanl2.ModularCalculator md.obsidian.Obsidian com.jgraph.drawio.desktop com.github.tchx84.Flatseal com.valvesoftware.Steam
 
 sudo snap install bitwarden ngrok
 
@@ -45,25 +45,86 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 - nano `~/.config/fish/config.fish`:
     ```
-    alias dcc="docker-compose"
-    alias apt='sudo apt'
-    alias upd='sudo apt update && sudo pkcon -y update && sudo snap refresh && flatpak update -y'
-    alias 7za='7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on'
-    alias docker-clean='docker kill (docker ps -aq) && docker rm (docker ps -aq)'
-    alias ccat='batcat'
-    alias rm='trash'
+    # Disable fish greeting
+    set -g fish_greeting
   
-    function convert_images_to_webp
-      for img in *.jpg *.jpeg *.png *.gif *.bmp; 
-          set new_img (string replace -r '\.(jpg|jpeg|png|gif|bmp)$' '.webp' $img); 
-          cwebp $img -o $new_img; 
-          rm $img; 
-      end
+    # ─── Aliases ────────────────────────────────────────
+    alias dcc="docker compose"
+    alias apt="sudo apt"
+    alias 7za='7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on'
+    alias nest="npx nest"
+    alias gm="bun $HOME/Work/gm/index.ts"
+    alias lazy="bun examples/chat-paster.ts"
+    alias ll="ls -alFh --color=auto"
+    alias tarzip="tar -czvf"
+    alias untarzip="tar -xzvf"
+    alias webp-all="convert_images_to_webp"
+
+    if type -q trash
+        alias rm="trash"
+    else
+        echo "⚠️ 'trash-cli' not found. Using rm -i (interactive mode)."
+        alias rm="rm -i"
     end
-
-    alias webp-all='convert_images_to_webp'
+    
+    # ─── Function: Update packages ────────────────────────────────────────────────
+    function upd --description 'Update system packages (APT, Snap, Flatpak)'
+    sudo apt update
+    sudo apt full-upgrade -y
+    
+        if type -q snap
+            echo "--> Refreshing Snaps..."
+            sudo snap refresh
+        end
+    
+        if type -q flatpak
+            echo "--> Updating Flatpaks..."
+            flatpak update -y
+        end
+    
+        echo "✅ System update complete."
+    end
+    
+    # ─── Function: Remove all Docker containers ───────────────────────────────────
+    function dclean --description 'Danger: Stop and remove ALL docker containers'
+    set -l containers (docker ps -aq)
+    if test -z "$containers"
+    echo "No containers to clean."
+    return 0
+    end
+    
+        echo "You are about to stop and delete ALL Docker containers:"
+        docker ps -a
+        read -l -P "Are you sure you want to proceed? (y/N) " confirm
+    
+        if string match -iq y $confirm
+            echo "Stopping and removing containers..."
+            docker kill $containers
+            docker rm $containers
+        else
+            echo "Operation cancelled."
+        end
+    end
+    
+    # ─── Function: Convert images to WebP ─────────────────────────────────────────
+    function convert_images_to_webp --description "Convert all images in the current directory to WebP"
+    set -l images (find . -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" \))
+    if test -z "$images"
+    echo "No images found to convert."
+    return 1
+    end
+    
+        for img in $images
+            set new_img (string replace -r '\.[^.]+$' '.webp' $img)
+            echo "Converting $img -> $new_img"
+            if cwebp -quiet $img -o $new_img
+                rm $img
+            else
+                echo "Error converting $img. Original file preserved."
+            end
+        end
+    end
     ```
-
 ---
 
 - Login in Telegram
