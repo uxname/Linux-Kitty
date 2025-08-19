@@ -103,7 +103,7 @@ echo snap >> ~/.hidden
     ```fish
     # Disable fish greeting
     set -g fish_greeting
-  
+
     # ─── Aliases ────────────────────────────────────────
     alias dcc="docker compose"
     alias apt="sudo apt"
@@ -115,18 +115,20 @@ echo snap >> ~/.hidden
     alias tarzip="tar -czvf"
     alias untarzip="tar -xzvf"
     alias webp-all="convert_images_to_webp"
-
-    if type -q trash
-        alias rm="trash"
+    
+    # Use trash-cli if available for a safer 'rm'
+    if type -q trash-put
+        alias rm="trash-put"
     else
         echo "⚠️ 'trash-cli' not found. Using rm -i (interactive mode)."
         alias rm="rm -i"
     end
     
-    # ─── Function: Update packages ────────────────────────────────────────────────
-    function upd --description 'Update system packages (APT, Snap, Flatpak)'
-    sudo apt update
-    sudo apt full-upgrade -y
+    # ─── Function: Update & Clean system ─────────────────────────────────────────
+    function upd --description 'Update & clean system packages (APT, Snap, Flatpak)'
+        sudo apt update
+        sudo apt upgrade -y
+        sudo apt autoremove -y # Clean up old dependencies
     
         if type -q snap
             echo "--> Refreshing Snaps..."
@@ -143,11 +145,11 @@ echo snap >> ~/.hidden
     
     # ─── Function: Remove all Docker containers ───────────────────────────────────
     function dclean --description 'Danger: Stop and remove ALL docker containers'
-    set -l containers (docker ps -aq)
-    if test -z "$containers"
-    echo "No containers to clean."
-    return 0
-    end
+        set -l containers (docker ps -aq)
+        if test -z "$containers"
+            echo "No containers to clean."
+            return 0
+        end
     
         echo "You are about to stop and delete ALL Docker containers:"
         docker ps -a
@@ -164,11 +166,11 @@ echo snap >> ~/.hidden
     
     # ─── Function: Convert images to WebP ─────────────────────────────────────────
     function convert_images_to_webp --description "Convert all images in the current directory to WebP"
-    set -l images (find . -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" \))
-    if test -z "$images"
-    echo "No images found to convert."
-    return 1
-    end
+        set -l images (find . -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" \))
+        if test -z "$images"
+            echo "No images found to convert."
+            return 1
+        end
     
         for img in $images
             set new_img (string replace -r '\.[^.]+$' '.webp' $img)
