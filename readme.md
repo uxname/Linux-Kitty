@@ -7,7 +7,6 @@
 ### 1. Repositories & System Update
 ```bash
 # Add PPAs
-sudo add-apt-repository -y ppa:nrbrtx/xorg-hotkeys
 sudo add-apt-repository -y ppa:fish-shell/release-3
 sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
 
@@ -33,7 +32,7 @@ sudo apt install -y \
     virtualbox-qt virtualbox-ext-pack \
     # Media & Graphics
     elisa pinta gocryptfs audacity obs-studio vlc inkscape gimp \
-    kdenlive kamoso qtqr transmission-qt handbrake cpu-checker \
+    kdenlive kamoso qtqr transmission-qt handbrake cpu-checker webp \
     # Other
     gnome-games openjdk-17-jdk
 ```
@@ -68,14 +67,14 @@ sudo dpkg -i /tmp/vscode.deb && sudo apt install -f -y && rm /tmp/vscode.deb
 ```bash
 # Docker (requires logout/login to apply)
 curl -sSL https://get.docker.com | sh
-sudo usmod -aG docker $USER
+sudo usermod -aG docker $USER
 
 # Fisher & plugins
-curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
 fisher install jorgebucaran/nvm.fish edc/bass oh-my-fish/theme-agnoster jethrokuan/z franciscolourenco/done danhper/fish-ssh-agent
 
-# Rust (press Enter for default installation)
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# Rust (install with default options without prompt)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # NPM
 npm config set legacy-peer-deps true
