@@ -1,12 +1,12 @@
 ![](logo.png)
 
-# KDE Neon Setup
+# KDE Neon Ultimate Setup
 
 ## 🚀 Part 1: Installation Script
 
 ### 1. Repositories & System Update
 ```bash
-# Add PPAs
+# Add PPAs (Fish & Fastfetch)
 sudo add-apt-repository -y ppa:fish-shell/release-3
 sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
 
@@ -17,16 +17,19 @@ sudo apt update && sudo apt full-upgrade -y
 ### 2. APT Packages
 ```bash
 sudo apt install -y \
-    # Shell & Terminal
-    fastfetch fish trash-cli mc htop \
+    # Shell & Modern Utils (Rust replacements)
+    fish fastfetch trash-cli mc btop \
+    fzf ripgrep fd-find bat eza zoxide plocate \
     # System & Utils
-    muon kompare asciinema zram-config python3-pip sshpass p7zip-full \
+    muon kompare asciinema python3-pip sshpass p7zip-full \
     gdu apt-transport-https ca-certificates chkrootkit rkhunter iotop pwgen \
     bridge-utils build-essential git fonts-liberation filelight pv \
-    laptop-mode-tools wireguard resolvconf software-properties-qt \
-    bleachbit gparted hardinfo glogg gpick \
-    # Development
-    nodejs npm golang-go gccgo sqlitebrowser pgmodeler umbrello okteta \
+    wireguard resolvconf software-properties-qt \
+    bleachbit gparted hardinfo glogg gpick duf tldr \
+    # Libraries (Video accel & Fonts)
+    intel-media-va-driver-non-free libva-utils fontconfig \
+    # Development (Libraries only, no languages)
+    sqlitebrowser pgmodeler umbrello okteta \
     # Virtualization & Remote
     qemu-kvm adb remmina remmina-plugin-rdp remmina-plugin-vnc \
     virtualbox-qt virtualbox-ext-pack \
@@ -34,7 +37,7 @@ sudo apt install -y \
     elisa pinta gocryptfs audacity obs-studio vlc inkscape gimp \
     kdenlive kamoso qtqr transmission-qt handbrake cpu-checker webp \
     # Other
-    gnome-games openjdk-17-jdk
+    gnome-games openjdk-21-jdk
 ```
 
 ### 3. Flatpak & Snap Packages
@@ -54,11 +57,11 @@ sudo snap install bitwarden ngrok
 
 ### 4. External `.deb` Packages
 ```bash
-# Google Chrome: https://www.google.com/chrome/
+# Google Chrome
 wget 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb' -O /tmp/chrome.deb
 sudo dpkg -i /tmp/chrome.deb && sudo apt install -f -y && rm /tmp/chrome.deb
 
-# Visual Studio Code: https://code.visualstudio.com/
+# Visual Studio Code
 wget 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64' -O /tmp/vscode.deb
 sudo dpkg -i /tmp/vscode.deb && sudo apt install -f -y && rm /tmp/vscode.deb
 ```
@@ -69,20 +72,48 @@ sudo dpkg -i /tmp/vscode.deb && sudo apt install -f -y && rm /tmp/vscode.deb
 curl -sSL https://get.docker.com | sh
 sudo usermod -aG docker $USER
 
-# Fisher & plugins
-curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
-fisher install jorgebucaran/nvm.fish edc/bass oh-my-fish/theme-agnoster jethrokuan/z franciscolourenco/done danhper/fish-ssh-agent
+# Volta (Node.js manager)
+curl https://get.volta.sh | bash
+volta install node
+# Install Volta completions
+$HOME/.volta/bin/volta completions fish > ~/.config/fish/completions/volta.fish
 
-# Rust (install with default options without prompt)
+# Fisher (Plugin Manager)
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+# Note: Removed 'z' in favor of zoxide, removed theme (use Starship below or stick to agnoster)
+fisher install edc/bass oh-my-fish/theme-agnoster franciscolourenco/done danhper/fish-ssh-agent
+
+# Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
-# NPM
-npm config set legacy-peer-deps true
+# Starship Prompt (Modern alternative to agnoster, optional)
+curl -sS https://starship.rs/install.sh | sh -s -- -y
 ```
 
-### 6. Final Touches
+### 6. System Tweaks (Performance & UI)
 ```bash
-# Hide snap directory from home
+# 1. Disable Baloo (File Indexer) to save CPU/Disk
+balooctl6 disable || balooctl disable
+balooctl6 purge || balooctl purge
+
+# 2. Fix Font Rendering (MacOS style)
+mkdir -p ~/.config/fontconfig
+cat <<EOF > ~/.config/fontconfig/fonts.conf
+<?xml version='1.0'?>
+<!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+<fontconfig>
+ <match target="font">
+  <edit mode="assign" name="rgba"><const>rgb</const></edit>
+  <edit mode="assign" name="hinting"><bool>true</bool></edit>
+  <edit mode="assign" name="hintstyle"><const>hintslight</const></edit>
+  <edit mode="assign" name="antialias"><bool>true</bool></edit>
+  <edit mode="assign" name="lcdfilter"><const>lcddefault</const></edit>
+ </match>
+</fontconfig>
+EOF
+fc-cache -fv
+
+# 3. Hide snap directory
 echo snap >> ~/.hidden
 ```
 
@@ -95,18 +126,38 @@ echo snap >> ~/.hidden
 ```fish
 set -g fish_greeting
 
+# ─── Tools Initialization ─────────────────────────────────────────────────────
+# Initialize Zoxide (Better 'cd')
+if type -q zoxide
+    zoxide init fish | source
+end
+
+# Initialize Starship (Prompt) - Uncomment if installed
+# starship init fish | source
+
 # ─── Aliases ──────────────────────────────────────────────────────────────────
+# Modern Replacements
+alias ls="eza --icons"
+alias ll="eza -alF --icons --git"
+alias tree="eza --tree --icons"
+alias cat="bat"
+alias grep="rg"
+alias find="fd"
+alias top="btop"
+alias df="duf"
+
+# Shortcuts
 alias dcc="docker compose"
 alias apt="sudo apt"
 alias 7za='7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on'
 alias nest="npx nest"
 alias gm="bun $HOME/Work/gm/index.ts"
 alias lazy="bun examples/chat-paster.ts"
-alias ll="ls -alFh --color=auto"
 alias tarzip="tar -czvf"
 alias untarzip="tar -xzvf"
 alias webp-all="convert_images_to_webp"
 
+# Trash-cli safety
 if type -q trash-put
     alias rm="trash-put"
 else
@@ -115,27 +166,59 @@ end
 
 # ─── Functions ────────────────────────────────────────────────────────────────
 function upd --description 'Update & clean all system packages'
+    echo "--> Updating APT..."
     sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
-    command -v snap >/dev/null && echo "--> Refreshing Snaps..." && sudo snap refresh
-    command -v flatpak >/dev/null && echo "--> Updating Flatpaks..." && flatpak update -y
+    
+    if type -q snap
+        echo "--> Refreshing Snaps..."
+        sudo snap refresh
+    end
+    
+    if type -q flatpak
+        echo "--> Updating Flatpaks..."
+        flatpak update -y
+    end
+    
+    if type -q rustup
+        echo "--> Updating Rust..."
+        rustup update
+    end
+    
     echo "✅ System update complete."
 end
 
 function dclean --description 'DANGER: Stop and remove ALL docker containers'
     set -l containers (docker ps -aq)
-    if test -z "$containers"; echo "No containers to clean."; return 0; end
-    echo "You are about to stop and delete ALL Docker containers:"; docker ps -a
+    if test -z "$containers"
+        echo "No containers to clean."
+        return 0
+    end
+    echo "You are about to stop and delete ALL Docker containers:"
+    docker ps -a
     read -l -P "Are you sure? (y/N) " confirm
-    if string match -iq y $confirm; docker kill $containers; docker rm $containers; else; echo "Cancelled."; end
+    if string match -iq y $confirm
+        docker kill $containers
+        docker rm $containers
+        echo "Cleanup done."
+    else
+        echo "Cancelled."
+    end
 end
 
 function convert_images_to_webp --description "Convert images in current dir to WebP"
     set -l images (find . -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" \))
-    if test -z "$images"; echo "No images found."; return 1; end
+    if test -z "$images"
+        echo "No images found."
+        return 1
+    end
     for img in $images
         set new_img (string replace -r '\.[^.]+$' '.webp' $img)
         echo "Converting $img -> $new_img"
-        if cwebp -quiet $img -o $new_img; rm $img; else; echo "Error converting $img"; end
+        if cwebp -quiet $img -o $new_img
+            rm $img
+        else
+            echo "Error converting $img"
+        end
     end
 end
 ```
@@ -143,33 +226,24 @@ end
 ### 2. Post-Install Checklist
 
 #### Application Installation & Setup
-- [ ] **JetBrains IDEs:**
-    - WebStorm: https://www.jetbrains.com/webstorm/
-    - DataGrip: https://www.jetbrains.com/datagrip/
-    - PyCharm: https://www.jetbrains.com/pycharm/
-    - GoLand: https://www.jetbrains.com/go/
+- [ ] **JetBrains IDEs:** Install via [Toolbox App](https://www.jetbrains.com/toolbox-app/) (recommended over manual download).
+  - WebStorm, DataGrip, PyCharm, GoLand.
 - [ ] **Telegram Desktop:** https://desktop.telegram.org/
 - [ ] **Login:** Telegram, Chrome, Bitwarden.
 - [ ] **Activate JetBrains:** https://jetbra.in/s
 
-#### Chrome Extensions
-- [ ] **uBlock Origin:** https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm
-- [ ] **JSON Formatter:** https://chrome.google.com/webstore/detail/json-formatter/mhimpmpmffogbmmkmajibklelopddmjf
-- [ ] **Bitwarden:** https://chrome.google.com/webstore/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb
-
-#### System Configuration
-- [ ] **Konsole:** Set Fish as default shell.
+#### System Configuration (Performance)
+- [ ] **fstab:** Remove `discard` option from SSD mount points.
+- [ ] **Swappiness:** Set `vm.swappiness=10` or `5`.
+- [ ] **Inotify:** Increase watchers for WebStorm (`fs.inotify.max_user_watches = 524288`).
+- [ ] **Konsole:** Set Fish as default shell. Enable "Blur" background if using transparent theme.
 - [ ] **Autostart:** Add Flameshot.
 - [ ] **Shortcuts:** Bind `PrtScn` to `flameshot gui`.
-- [ ] **Dolphin:** Add "Open as Root", set default path to `~`.
-- [ ] **System Settings:**
-    - [ ] Set Chrome as default browser.
-    - [ ] Plasma Search: Enable only Applications, Calculator, Command line, Unit Converter, System settings.
-    - [ ] Disable file search (Baloo).
-    - [ ] Enable Night Color.
-    - [ ] Add Russian keyboard layout, set indicator to flag.
-    - [ ] Keyboard repeat: Delay 250ms, Rate 50 reps/s.
-    - [ ] Add virtual desktops.
-    - [ ] *Optional:* `sudo apt remove zram-config`.
-- [ ] **VirtualBox:** Download Guest Additions ISO.
-- [ ] **JetBrains Plugins:** Install `Windsurf`, `Prisma`, `GraphQL`, `Plant UML`, `Copilot`, `.env files support`, `.ignore`, `GitToolBox`, `React snippets`, `React buddy`.
+
+#### KDE Plasma Tweaks
+- [ ] **General Behavior:** Animation Speed -> "Instant" (or near instant).
+- [ ] **KWin:** Enable "BorderlessMaximizedWindows" in `~/.config/kwinrc`.
+- [ ] **Virtual Desktops:** Create 3 desktops, Animation "Slide". Use 4-finger swipe.
+- [ ] **Keyboard:** Delay 220ms, Rate 40-50 reps/s.
+- [ ] **Search:** Disable Baloo (File Search), enable only Apps & Calculator.
+- [ ] **Night Color:** Enable.
