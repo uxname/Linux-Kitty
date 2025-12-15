@@ -25,7 +25,7 @@ sudo apt install -y \
     gdu apt-transport-https ca-certificates chkrootkit rkhunter iotop pwgen \
     bridge-utils build-essential git fonts-liberation filelight pv \
     wireguard resolvconf software-properties-qt \
-    bleachbit gparted hardinfo glogg gpick duf tldr \
+    bleachbit gparted hardinfo glogg gpick duf tldr earlyoom \
     # Libraries (Video accel & Fonts)
     intel-media-va-driver-non-free libva-utils fontconfig \
     # Development (Libraries only, no languages)
