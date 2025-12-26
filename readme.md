@@ -96,7 +96,14 @@ curl -sS https://starship.rs/install.sh | sh -s -- -y
 balooctl6 disable || balooctl disable
 balooctl6 purge || balooctl purge
 
-# 2. Fix Font Rendering (MacOS style)
+# 2. Install JetBrains Mono Nerd Font
+mkdir -p ~/.local/share/fonts
+cd /tmp
+wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+unzip JetBrainsMono.zip -d ~/.local/share/fonts
+fc-cache -fv
+
+# 3. Fix Font Rendering (MacOS style)
 mkdir -p ~/.config/fontconfig
 cat <<EOF > ~/.config/fontconfig/fonts.conf
 <?xml version='1.0'?>
