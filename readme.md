@@ -123,7 +123,7 @@ echo snap >> ~/.hidden
 
 ### 1. Fish Config (`~/.config/fish/config.fish`)
 
-```fish
+```shell
 set -g fish_greeting
 
 # ─── Tools Initialization ─────────────────────────────────────────────────────
@@ -165,26 +165,44 @@ else
 end
 
 # ─── Functions ────────────────────────────────────────────────────────────────
-function upd --description 'Update & clean all system packages'
-    echo "--> Updating APT..."
-    sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
-    
+function upd --description 'Comprehensive system update for KDE Neon'
+    set -l b (set_color blue)
+    set -l g (set_color green)
+    set -l y (set_color yellow)
+    set -l r (set_color red)
+    set -l n (set_color normal)
+
+    echo -e "$b" "[1/5] --- Updating System Repositories (APT/PackageKit) ---" "$n"
+    if type -q pkcon
+        sudo pkcon update -y
+    else
+        sudo apt update && sudo apt full-upgrade -y
+    end
+
+    echo -e "\n$b" "[2/5] --- Cleaning System (APT) ---" "$n"
+    sudo apt autoremove -y && sudo apt autoclean
+
     if type -q snap
-        echo "--> Refreshing Snaps..."
+        echo -e "\n$b" "[3/5] --- Refreshing Snaps ---" "$n"
         sudo snap refresh
     end
-    
+
     if type -q flatpak
-        echo "--> Updating Flatpaks..."
+        echo -e "\n$b" "[4/5] --- Updating Flatpaks ---" "$n"
         flatpak update -y
+        flatpak uninstall --unused -y
     end
-    
-    if type -q rustup
-        echo "--> Updating Rust..."
-        rustup update
+
+    if type -q fwupdmgr
+        echo -e "\n$b" "[5/5] --- Checking Firmware Updates ---" "$n"
+        sudo fwupdmgr get-updates; or true
     end
-    
-    echo "✅ System update complete."
+
+    echo -e "\n$g" "✅ System update complete!" "$n"
+
+    if test -f /var/run/reboot-required
+        echo -e "$r" "⚠️ System reboot is required." "$n"
+    end
 end
 
 function dclean --description 'DANGER: Stop and remove ALL docker containers'
