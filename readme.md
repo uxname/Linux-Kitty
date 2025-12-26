@@ -135,34 +135,61 @@ end
 # Initialize Starship (Prompt) - Uncomment if installed
 # starship init fish | source
 
-# ─── Aliases ──────────────────────────────────────────────────────────────────
+# ─── Abbreviations (Expandable shortcuts) ─────────────────────────────────────
+
+# Docker
+abbr -a dcc  'docker compose'
+abbr -a dcl  'docker logs -f'
+abbr -a dcu  'docker compose up -d'
+abbr -a dcd  'docker compose down'
+abbr -a dps  'docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
+
+# Git (Essential for every dev)
+abbr -a g    'git'
+abbr -a ga   'git add'
+abbr -a gc   'git commit -m'
+abbr -a gp   'git push'
+abbr -a gl   'git pull'
+abbr -a gs   'git status'
+abbr -a gd   'git diff'
+abbr -a gco  'git checkout'
+
+# System
+abbr -a n    'nano'
+abbr -a v    'nvim'
+abbr -a st   'fastfetch'
+abbr -a c    'clear'
+abbr -a j    'z'
+
+# ─── Aliases (Fixed replacements) ─────────────────────────────────────────────
+
 # Modern Replacements
-alias ls="eza --icons"
-alias ll="eza -alF --icons --git"
+alias ls="eza --icons --group-directories-first"
+alias ll="eza -alF --icons --git --header"
 alias tree="eza --tree --icons"
 alias cat="bat"
 alias grep="rg"
 alias find="fd"
 alias top="btop"
 alias df="duf"
+alias du="gdu"
 
-# Shortcuts
-alias dcc="docker compose"
-alias apt="sudo apt"
-alias 7za='7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on'
-alias nest="npx nest"
-alias gm="bun $HOME/Work/gm/index.ts"
-alias lazy="bun examples/chat-paster.ts"
-alias tarzip="tar -czvf"
-alias untarzip="tar -xzvf"
-alias webp-all="convert_images_to_webp"
-
-# Trash-cli safety
+# Better 'rm' (More robust check)
 if type -q trash-put
     alias rm="trash-put"
 else
     alias rm="rm -i"
 end
+
+# Utilities
+alias 7za='7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on'
+alias ip="ip -color=auto"
+alias myip="curl ifconfig.me"
+
+# ─── Quick Navigation ────────────────────────────────────────────────────────
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 
 # ─── Functions ────────────────────────────────────────────────────────────────
 function upd --description 'Comprehensive system update for KDE Neon'
