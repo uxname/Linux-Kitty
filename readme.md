@@ -17,25 +17,22 @@ sudo apt update && sudo apt full-upgrade -y
 ### 2. APT Packages
 ```bash
 sudo apt install -y \
-    # Shell & Modern Utils (Rust replacements)
-    fish fastfetch trash-cli mc btop \
-    fzf ripgrep fd-find bat eza zoxide plocate jq \
-    # System & Utils
-    muon kompare asciinema python3-pip sshpass p7zip-full \
-    gdu apt-transport-https ca-certificates chkrootkit rkhunter iotop pwgen \
-    bridge-utils build-essential git fonts-liberation filelight pv \
-    wireguard resolvconf software-properties-qt \
-    bleachbit gparted hardinfo glogg gpick duf tldr earlyoom \
-    # Libraries (Video accel & Fonts)
-    intel-media-va-driver-non-free fontconfig \
-    # Development (Libraries only, no languages)
+    # Shell & Modern Utils
+    fish fastfetch trash-cli btop fzf ripgrep fd-find bat eza zoxide plocate jq tldr \
+    # System & Networking
+    muon kompare asciinema python3-pip sshpass p7zip-full gdu \
+    apt-transport-https ca-certificates chkrootkit rkhunter iotop pwgen \
+    bridge-utils build-essential git filelight pv wireguard resolvconf \
+    software-properties-qt bleachbit gparted hardinfo glogg gpick duf earlyoom \
+    # Libraries & Hardware
+    intel-media-va-driver-non-free fontconfig cpu-checker \
+    # Development Tools
     sqlitebrowser pgmodeler umbrello okteta \
-    # Virtualization & Remote
+    # Virtualization & Remote Desktop
     qemu-kvm adb remmina remmina-plugin-rdp remmina-plugin-vnc \
-    virtualbox-qt virtualbox-ext-pack \
     # Media & Graphics
     elisa pinta gocryptfs audacity obs-studio vlc inkscape gimp \
-    kdenlive kamoso qtqr transmission-qt handbrake cpu-checker webp \
+    kdenlive kamoso qtqr transmission-qt handbrake webp \
     # Other
     gnome-games openjdk-21-jdk
 ```
