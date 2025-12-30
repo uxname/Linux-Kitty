@@ -172,7 +172,7 @@ abbr -a n    'nano'
 abbr -a v    'nvim'
 abbr -a st   'fastfetch'
 abbr -a c    'clear'
-abbr -a j    'z'
+abbr -a j    'zoxide query'
 
 # ─── Aliases (Fixed replacements) ─────────────────────────────────────────────
 
@@ -182,7 +182,6 @@ alias ll="eza -alF --icons --git --header"
 alias tree="eza --tree --icons"
 alias cat="bat"
 alias grep="rg"
-alias find="fd"
 alias top="btop"
 alias df="duf"
 alias du="gdu"
