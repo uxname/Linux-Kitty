@@ -19,7 +19,7 @@ sudo apt update && sudo apt full-upgrade -y
 sudo apt install -y \
     # Shell & Modern Utils (Rust replacements)
     fish fastfetch trash-cli mc btop \
-    fzf ripgrep fd-find bat eza zoxide plocate \
+    fzf ripgrep fd-find bat eza zoxide plocate jq \
     # System & Utils
     muon kompare asciinema python3-pip sshpass p7zip-full \
     gdu apt-transport-https ca-certificates chkrootkit rkhunter iotop pwgen \
@@ -27,7 +27,7 @@ sudo apt install -y \
     wireguard resolvconf software-properties-qt \
     bleachbit gparted hardinfo glogg gpick duf tldr earlyoom \
     # Libraries (Video accel & Fonts)
-    intel-media-va-driver-non-free libva-utils fontconfig \
+    intel-media-va-driver-non-free fontconfig \
     # Development (Libraries only, no languages)
     sqlitebrowser pgmodeler umbrello okteta \
     # Virtualization & Remote
