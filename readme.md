@@ -64,6 +64,12 @@ sudo dpkg -i /tmp/chrome.deb && sudo apt install -f -y && rm /tmp/chrome.deb
 # Visual Studio Code
 wget 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64' -O /tmp/vscode.deb
 sudo dpkg -i /tmp/vscode.deb && sudo apt install -f -y && rm /tmp/vscode.deb
+
+# Topgrade (System Upgrade Tool)
+wget -O topgrade_latest_amd64.deb \
+  "$(curl -s https://api.github.com/repos/topgrade-rs/topgrade/releases/latest \
+    | jq -r '.assets[] | select(.name | test("amd64.deb")) | .browser_download_url')"
+sudo apt install -y ./topgrade_latest_amd64.deb && rm topgrade_latest_amd64.deb
 ```
 
 ### 5. Development Environment
@@ -197,47 +203,6 @@ alias myip="curl ifconfig.me"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
-
-# ─── Functions ────────────────────────────────────────────────────────────────
-function upd --description 'Comprehensive system update for KDE Neon'
-    set -l b (set_color blue)
-    set -l g (set_color green)
-    set -l y (set_color yellow)
-    set -l r (set_color red)
-    set -l n (set_color normal)
-
-    echo -e "$b" "[1/5] --- Updating System Repositories (APT/PackageKit) ---" "$n"
-    if type -q pkcon
-        sudo pkcon update -y
-    else
-        sudo apt update && sudo apt full-upgrade -y
-    end
-
-    echo -e "\n$b" "[2/5] --- Cleaning System (APT) ---" "$n"
-    sudo apt autoremove -y && sudo apt autoclean
-
-    if type -q snap
-        echo -e "\n$b" "[3/5] --- Refreshing Snaps ---" "$n"
-        sudo snap refresh
-    end
-
-    if type -q flatpak
-        echo -e "\n$b" "[4/5] --- Updating Flatpaks ---" "$n"
-        flatpak update -y
-        flatpak uninstall --unused -y
-    end
-
-    if type -q fwupdmgr
-        echo -e "\n$b" "[5/5] --- Checking Firmware Updates ---" "$n"
-        sudo fwupdmgr get-updates; or true
-    end
-
-    echo -e "\n$g" "✅ System update complete!" "$n"
-
-    if test -f /var/run/reboot-required
-        echo -e "$r" "⚠️ System reboot is required." "$n"
-    end
-end
 
 function dclean --description 'DANGER: Stop and remove ALL docker containers'
     set -l containers (docker ps -aq)
