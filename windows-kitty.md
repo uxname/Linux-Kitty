@@ -18,7 +18,7 @@ winget install -e --id Microsoft.AppInstaller
 ### 2. Core Toolset
 ```powershell
 # CLI Utilities & Fonts
-scoop install git 7zip fastfetch btop eza zoxide gdu topgrade fzf starship JetBrainsMono-NF
+scoop install git 7zip fastfetch btop eza zoxide gdu topgrade fzf starship JetBrainsMono-NF msys2
 
 # GUI Applications
 scoop install googlechrome webstorm vscode telegram vlc windows-terminal discord wiztree bruno
