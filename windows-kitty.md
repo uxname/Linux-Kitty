@@ -47,3 +47,5 @@ Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineOption -PredictionViewStyle ListView
 Set-PSReadLineKeyHandler -Key "RightArrow" -Function AcceptNextSuggestionWord
 ```
+
+Install fish shell: `pacman -S fish`
